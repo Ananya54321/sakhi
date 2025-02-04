@@ -21,22 +21,8 @@ export default function App() {
   return (
     <View>
       {session && session.user ? (
-        <View
-          style={{
-            height: "100%",
-            display: "flex",
-            backgroundColor: "#222",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text
-            style={{
-              color: "#FFF",
-            }}
-          >
-            Hey, {session.user.email}
-          </Text>
+        <View className="h-[100%] text-black flex justify-center items-center bg-[#222]">
+          <Text className="text-white">Hey, {session.user.email}</Text>
           <Pressable
             onPress={() => {
               supabase.auth.signOut();
@@ -50,13 +36,11 @@ export default function App() {
               width: 200,
               backgroundColor: "#FFF",
               borderRadius: 10,
-            }}
-          >
+            }}>
             <Text
               style={{
                 color: "#333",
-              }}
-            >
+              }}>
               Sign Out
             </Text>
           </Pressable>
