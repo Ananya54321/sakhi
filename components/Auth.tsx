@@ -10,6 +10,8 @@ import {
 
 import { supabase } from "../utils/supabase";
 
+import { useCallback } from "react";
+
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
     supabase.auth.startAutoRefresh();
@@ -23,34 +25,39 @@ export default function Authentication() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function signInWithEmail() {
+  const signInWithEmail = useCallback(async () => {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
+      email,
+      password,
     });
-
-    console.log("error", error);
 
     if (error) Alert.alert(error.message);
     setLoading(false);
-  }
+  }, [email, password]);
 
-  async function signUpWithEmail() {
+  const signUpWithEmail = useCallback(async () => {
     setLoading(true);
     const {
       data: { session },
       error,
-    } = await supabase.auth.signUp({
-      email: email,
-      password: password,
-    });
+    } = await supabase.auth.signUp({ email, password });
 
-    if (error) Alert.alert(error.message);
-    if (!session)
+    if (error) {
+      Alert.alert(error.message);
+      setLoading(false);
+      return;
+    }
+
+    // if (session) {
+    //   createUser("hello", session.user.id, email);
+    // }
+    else {
       Alert.alert("Please check your inbox for email verification!");
+    }
+
     setLoading(false);
-  }
+  }, [email, password]);
 
   return (
     <View style={styles.container}>
